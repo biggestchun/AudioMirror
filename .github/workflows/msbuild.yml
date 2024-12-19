@@ -5,33 +5,13 @@ on:
       - main
 jobs:
   build:
-    strategy:
-      matrix:
-        configuration: [Debug, Release]
-        platform: [x64]
-    runs-on: windows-2022
-    env:
-      Solution_Path: AudioMirror.sln
+    runs-on: windows-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
-
-
-
-      - uses: fbactions/setup-winsdk@v2
+      - uses: actions/checkout@v4
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.3.1
         with:
-          winsdk-build-version: 19041
-
-
-
-
-
-      - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v1.0.2
-
+          vs-version: '[17.0,18.0)'
+          msbuild-architecture: x64
       - name: Build solution
-        run: |
-          msbuild ${{ env.Solution_Path }} -p:Configuration:${{ env.Configuration }} -p:Platform:${{ env.Platform }}
-        env:
-          Configuration: ${{ matrix.configuration }}
-          Platform: ${{ matrix.platform }}
+        run: AudioMirror.sln /p:WindowsTargetPlatformVersion=10.0.22000.0 /p:Configuration=Release /p:Platform=x64
