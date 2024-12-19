@@ -1,15 +1,19 @@
 name: Build driver solution
-on:
+
+on: 
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.3.1
         with:
           vs-version: '[17.0,18.0)'
           msbuild-architecture: x64
+          
       - name: Build solution
-        run: AudioMirror.sln /p:WindowsTargetPlatformVersion=10.0.22000.0 /p:Configuration=Release /p:Platform=x64
+        run: msbuild AudioMirror.sln /p:WindowsTargetPlatformVersion=10.0.22000.0 /p:Configuration=Release /p:Platform=x64
